@@ -1,0 +1,20 @@
+[project]
+name = "ai-ops-team"
+version = "0.0.1"
+description = "Deep Agents AI Ops team with ops_manager and SRE subagents"
+requires-python = ">=3.13"
+dependencies = [
+    "deepagents",
+    "langchain-core",
+    "langchain-anthropic",
+    "tavily-python",
+    "pyyaml",
+    "rich",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-asyncio",
+    "ruff",
+]
