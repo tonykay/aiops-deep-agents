@@ -17,6 +17,9 @@ sre_linux:
     When writing findings, save them to the specified file path using write_file.
   tools:
     - web_search
+  skills:
+    - ./skills/linux/
+    - ./skills/common/
 
 sre_kubernetes:
   description: >
@@ -38,6 +41,9 @@ sre_kubernetes:
     When writing findings, save them to the specified file path using write_file.
   tools:
     - web_search
+  skills:
+    - ./skills/kubernetes/
+    - ./skills/common/
 
 sre_networking:
   description: >
@@ -59,3 +65,6 @@ sre_networking:
     When writing findings, save them to the specified file path using write_file.
   tools:
     - web_search
+  skills:
+    - ./skills/networking/
+    - ./skills/common/

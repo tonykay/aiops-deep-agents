@@ -24,22 +24,28 @@ ops_manager (Deep Agent)
 | File | Purpose |
 |------|---------|
 | `AGENTS.md` | Ops manager persona and triage protocol (loaded as memory) |
-| `subagents.yaml` | SRE specialist definitions with model, prompt, and tools |
-| `skills/*/SKILL.md` | Diagnostic workflows, auto-discovered and shareable across subagents |
+| `subagents.yaml` | SRE specialist definitions with model, prompt, tools, and skills |
+| `skills/<domain>/*/SKILL.md` | Per-subagent diagnostic workflows, declared via `skills:` paths in subagents.yaml |
+| `skills/common/*/SKILL.md` | Shared skills referenced by all subagents |
 | `ops_manager.py` | Wires it all together via `create_deep_agent()` |
 
 ## Skills
 
-Skills are shareable diagnostic workflows. Multiple subagents can use the same skill.
+Each subagent declares its `skills:` as an array of source directory paths in `subagents.yaml`. Multiple subagents can reference the same source (e.g., `./skills/common/`).
 
-| Skill | Used By | Purpose |
-|-------|---------|---------|
-| `linux-diagnostics` | sre_linux | systemd, performance profiling, host health |
-| `kubernetes-troubleshooting` | sre_kubernetes | Pod failures, scheduling, resource pressure |
-| `networking-layer2` | sre_networking | VLANs, ARP, spanning tree, link state |
-| `networking-layer3` | sre_networking | IP routing, firewalls, OSPF/BGP |
-| `networking-dns` | sre_networking | Name resolution, CoreDNS, split-horizon |
-| `common-log-analysis` | all | Cross-domain log correlation and pattern analysis |
+```
+skills/
+├── linux/          # sre_linux skills
+│   └── diagnostics/SKILL.md
+├── kubernetes/     # sre_kubernetes skills
+│   └── troubleshooting/SKILL.md
+├── networking/     # sre_networking skills
+│   ├── layer2/SKILL.md
+│   ├── layer3/SKILL.md
+│   └── dns/SKILL.md
+└── common/         # Shared by all subagents
+    └── log-analysis/SKILL.md
+```
 
 ## Quick Start
 
@@ -60,12 +66,12 @@ uv run python ops_manager.py "Intermittent DNS failures resolving internal servi
 
 **Add a subagent** -- e.g., `sre_database`, `sre_cloud`:
 
-1. Add entry to `subagents.yaml`
-2. Create skills under `skills/`
+1. Add entry to `subagents.yaml` (with `skills:` paths)
+2. Create `skills/<domain>/` with skill subdirectories containing `SKILL.md`
 3. Register any new tools in `ops_manager.py`
 4. Update domain awareness in `AGENTS.md`
 
-**Add a skill** -- just create `skills/<name>/SKILL.md`. Auto-discovered, no registration needed.
+**Add a skill** -- create `skills/<domain>/<skill-name>/SKILL.md` and reference the source directory in the subagent's `skills:` array. For shared skills, add to `skills/common/`.
 
 ## Future: Channel Adapters (post-0.0.1)
 

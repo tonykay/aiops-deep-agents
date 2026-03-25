@@ -95,6 +95,8 @@ def load_subagents(config_path: Path) -> list:
             subagent["model"] = spec["model"]
         if "tools" in spec:
             subagent["tools"] = [available_tools[t] for t in spec["tools"]]
+        if "skills" in spec:
+            subagent["skills"] = spec["skills"]
         subagents.append(subagent)
 
     return subagents
@@ -104,7 +106,6 @@ def create_ops_manager():
     """Create the ops manager agent configured by filesystem files."""
     return create_deep_agent(
         memory=["./AGENTS.md"],
-        skills=["./skills/"],
         tools=[],
         subagents=load_subagents(PROJECT_DIR / "subagents.yaml"),
         backend=FilesystemBackend(root_dir=PROJECT_DIR),
